@@ -5,7 +5,7 @@ async function sendMessage() {
     document.getElementById("chat-box").innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
     document.getElementById("user-input").value = "";
 
-    const response = await fetch("https://chat-gpt-alpha-navy.vercel.app/", {
+    const response = await fetch("/api/chat", { // Vercel API route
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userInput })
