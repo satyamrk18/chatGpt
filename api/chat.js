@@ -8,7 +8,10 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Message is required" });
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;  // Ensure this is set in Vercel
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+        return res.status(500).json({ error: "Missing OpenAI API key" });
+    }
 
     try {
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -24,16 +27,16 @@ export default async function handler(req, res) {
         });
 
         const data = await response.json();
-        console.log("OpenAI Response:", data);
+        console.log("ChatGPT API Response:", data); // Debugging
 
         if (data.choices && data.choices.length > 0) {
-            res.status(200).json({ reply: data.choices[0].message.content });
+            return res.status(200).json({ reply: data.choices[0].message.content });
         } else {
-            res.status(500).json({ error: "No response from ChatGPT" });
+            return res.status(500).json({ error: "Invalid response from OpenAI" });
         }
 
     } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error("Server Error:", error);
+        return res.status(500).json({ error: "Failed to fetch response from OpenAI" });
     }
 }
