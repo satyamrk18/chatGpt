@@ -6,14 +6,14 @@ async function sendMessage() {
     document.getElementById("user-input").value = "";
 
     try {
-        const response = await fetch("/api/chat", { // Make sure it's the correct API route
+        const response = await fetch("/api/chat", { // This calls the backend API
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: userInput })
         });
 
         const data = await response.json();
-        console.log("Frontend Response:", data); // Debugging log
+        console.log("API Response:", data); // Debugging log
 
         if (data.reply) {
             document.getElementById("chat-box").innerHTML += `<p><strong>ChatGPT:</strong> ${data.reply}</p>`;
